@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import SectionHeader from "@/components/ui/SectionHeader";
 import Badge from "@/components/ui/Badge";
 import { experiences } from "@/lib/data";
@@ -127,11 +128,17 @@ interface ExpProps {
   exp: (typeof experiences)[number];
 }
 
+const PREVIEW_COUNT = 2;
+
 function ExperienceCard({ exp }: ExpProps) {
+  const [expanded, setExpanded] = useState(false);
+  const visible = expanded ? exp.description : exp.description.slice(0, PREVIEW_COUNT);
+  const hasMore = exp.description.length > PREVIEW_COUNT;
+
   return (
     <div className="glass rounded-2xl p-6 hover:bg-white/[0.06] hover:border-white/[0.14] transition-all duration-300 group">
       {/* Role + company */}
-      <div className="mb-4">
+      <div className="mb-3">
         <div className="flex items-center gap-2 mb-1">
           <h3 className="font-bold text-slate-100 text-base group-hover:text-indigo-300 transition-colors">
             {exp.role}
@@ -147,22 +154,46 @@ function ExperienceCard({ exp }: ExpProps) {
         <p className="text-slate-600 text-xs mt-0.5 font-mono">{exp.period} · {exp.location}</p>
       </div>
 
-      {/* Bullets */}
-      <ul className="space-y-2 mb-5">
-        {exp.description.map((bullet, bi) => (
-          <li key={bi} className="flex items-start gap-2.5 text-sm text-slate-400 leading-relaxed">
-            <span className="mt-2 w-1 h-1 rounded-full bg-cyan-500 shrink-0" />
-            {bullet}
-          </li>
-        ))}
-      </ul>
-
-      {/* Tech badges */}
-      <div className="flex flex-wrap gap-1.5">
+      {/* Tech badges — before description */}
+      <div className="flex flex-wrap gap-1.5 mb-4">
         {exp.technologies.map((tech) => (
           <Badge key={tech} variant="accent">{tech}</Badge>
         ))}
       </div>
+
+      {/* Bullets with show more */}
+      <ul className="space-y-2">
+        <AnimatePresence initial={false}>
+          {visible.map((bullet, bi) => (
+            <motion.li
+              key={bi}
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+              className="flex items-start gap-2.5 text-sm text-slate-400 leading-relaxed overflow-hidden"
+            >
+              <span className="mt-2 w-1 h-1 rounded-full bg-cyan-500 shrink-0" />
+              {bullet}
+            </motion.li>
+          ))}
+        </AnimatePresence>
+      </ul>
+
+      {hasMore && (
+        <button
+          onClick={() => setExpanded(!expanded)}
+          className="mt-3 text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1 transition-colors"
+        >
+          <span>{expanded ? "Show less" : `+${exp.description.length - PREVIEW_COUNT} more`}</span>
+          <svg
+            className={`w-3 h-3 transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
+            fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+      )}
     </div>
   );
 }
