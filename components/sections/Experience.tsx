@@ -56,9 +56,10 @@ export default function Experience() {
                     </span>
                   </div>
 
-                  {/* Desktop alternating layout */}
-                  <div className="hidden md:grid grid-cols-2 gap-8 items-start">
-                    <div className={`${isLeft ? "pr-16" : "pl-16"} ${!isLeft ? "col-start-1 row-start-1" : ""}`}>
+                  {/* Desktop alternating layout — left col always pr-10, right col always pl-10 */}
+                  <div className="hidden md:grid grid-cols-2 gap-0 items-start">
+                    {/* Left column */}
+                    <div className="pr-10">
                       {isLeft ? (
                         <motion.div
                           initial={{ opacity: 0, x: -40 }}
@@ -81,7 +82,8 @@ export default function Experience() {
                       )}
                     </div>
 
-                    <div className={`${!isLeft ? "pl-16" : "pr-16"}`}>
+                    {/* Right column */}
+                    <div className="pl-10">
                       {!isLeft ? (
                         <motion.div
                           initial={{ opacity: 0, x: 40 }}
