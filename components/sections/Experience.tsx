@@ -6,10 +6,11 @@ import SectionHeader from "@/components/ui/SectionHeader";
 import Badge from "@/components/ui/Badge";
 import { experiences } from "@/lib/data";
 
-const companyIcons: Record<string, string> = {
-  jbs: "🤖",
-  asani: "⚡",
-  aeroglobe: "✈️",
+// Company initials for the timeline node
+const companyInitials: Record<string, string> = {
+  jbs: "JBS",
+  asani: "AS",
+  aeroglobe: "AG",
 };
 
 export default function Experience() {
@@ -23,38 +24,42 @@ export default function Experience() {
       <div className="max-w-5xl mx-auto relative">
         <SectionHeader
           eyebrow="Experience"
-          title="Engineering "
-          highlightedWord="History"
+          title="Professional "
+          highlightedWord="Journey"
         />
 
         <div className="relative">
           {/* Center vertical line */}
-          <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2 bg-gradient-to-b from-indigo-500/60 via-purple-500/40 via-cyan-500/30 to-transparent" />
+          <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2 bg-gradient-to-b from-indigo-500/50 via-purple-500/30 to-transparent" />
 
           {/* Mobile left line */}
-          <div className="md:hidden absolute left-5 top-0 bottom-0 w-px bg-gradient-to-b from-indigo-500/60 via-purple-500/30 to-transparent" />
+          <div className="md:hidden absolute left-5 top-0 bottom-0 w-px bg-gradient-to-b from-indigo-500/50 via-purple-500/25 to-transparent" />
 
           <div className="space-y-12 md:space-y-16">
             {experiences.map((exp, i) => {
               const isLeft = i % 2 === 0;
+              const initials = companyInitials[exp.id] ?? "CO";
+
               return (
                 <div key={exp.id} className="relative">
-                  {/* Center icon node */}
-                  <div className="hidden md:flex absolute left-1/2 top-8 -translate-x-1/2 z-10 w-12 h-12 rounded-xl bg-[#0f0f1a] border border-indigo-500/30 items-center justify-center text-xl shadow-lg shadow-indigo-500/10">
-                    {companyIcons[exp.id] ?? "💼"}
+                  {/* Center node — initials, no emoji */}
+                  <div className="hidden md:flex absolute left-1/2 top-8 -translate-x-1/2 z-10 w-11 h-11 rounded-lg bg-[#0c0c18] border border-indigo-500/25 items-center justify-center shadow-md shadow-black/40">
+                    <span className="text-[10px] font-bold tracking-wider text-indigo-400">
+                      {initials}
+                    </span>
                   </div>
 
                   {/* Mobile dot */}
-                  <div className="md:hidden absolute left-5 top-8 -translate-x-1/2 z-10 w-8 h-8 rounded-lg bg-[#0f0f1a] border border-indigo-500/30 flex items-center justify-center text-sm">
-                    {companyIcons[exp.id] ?? "💼"}
+                  <div className="md:hidden absolute left-5 top-8 -translate-x-1/2 z-10 w-8 h-8 rounded-md bg-[#0c0c18] border border-indigo-500/25 flex items-center justify-center">
+                    <span className="text-[8px] font-bold tracking-wider text-indigo-400">
+                      {initials}
+                    </span>
                   </div>
 
                   {/* Desktop alternating layout */}
                   <div className="hidden md:grid grid-cols-2 gap-8 items-start">
-                    {/* Left side */}
                     <div className={`${isLeft ? "pr-16" : "pl-16"} ${!isLeft ? "col-start-1 row-start-1" : ""}`}>
                       {isLeft ? (
-                        /* Content card on left */
                         <motion.div
                           initial={{ opacity: 0, x: -40 }}
                           whileInView={{ opacity: 1, x: 0 }}
@@ -64,7 +69,6 @@ export default function Experience() {
                           <ExperienceCard exp={exp} />
                         </motion.div>
                       ) : (
-                        /* Date/company on left when card is right */
                         <motion.div
                           initial={{ opacity: 0, x: -30 }}
                           whileInView={{ opacity: 1, x: 0 }}
@@ -77,10 +81,8 @@ export default function Experience() {
                       )}
                     </div>
 
-                    {/* Right side */}
                     <div className={`${!isLeft ? "pl-16" : "pr-16"}`}>
                       {!isLeft ? (
-                        /* Content card on right */
                         <motion.div
                           initial={{ opacity: 0, x: 40 }}
                           whileInView={{ opacity: 1, x: 0 }}
@@ -90,7 +92,6 @@ export default function Experience() {
                           <ExperienceCard exp={exp} />
                         </motion.div>
                       ) : (
-                        /* Date/company on right when card is left */
                         <motion.div
                           initial={{ opacity: 0, x: 30 }}
                           whileInView={{ opacity: 1, x: 0 }}
@@ -136,33 +137,33 @@ function ExperienceCard({ exp }: ExpProps) {
   const hasMore = exp.description.length > PREVIEW_COUNT;
 
   return (
-    <div className="glass rounded-2xl p-6 hover:bg-white/[0.06] hover:border-white/[0.14] transition-all duration-300 group">
-      {/* Role + company */}
+    <div className="glass rounded-2xl p-5 hover:bg-white/[0.06] hover:border-white/[0.14] transition-all duration-300 group">
+      {/* Header */}
       <div className="mb-3">
-        <div className="flex items-center gap-2 mb-1">
-          <h3 className="font-bold text-slate-100 text-base group-hover:text-indigo-300 transition-colors">
+        <div className="flex items-center gap-2 flex-wrap mb-0.5">
+          <h3 className="font-bold text-slate-100 text-sm group-hover:text-indigo-300 transition-colors">
             {exp.role}
           </h3>
           {exp.current && (
             <span className="flex items-center gap-1 text-[10px] font-medium text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 px-2 py-0.5 rounded-full">
               <span className="w-1 h-1 rounded-full bg-emerald-400 animate-pulse" />
-              Current
+              Present
             </span>
           )}
         </div>
-        <p className="text-indigo-400 text-sm font-semibold">{exp.company}</p>
-        <p className="text-slate-600 text-xs mt-0.5 font-mono">{exp.period} · {exp.location}</p>
+        <p className="text-indigo-400 text-xs font-semibold">{exp.company}</p>
+        <p className="text-slate-600 text-[11px] mt-0.5 font-mono">{exp.period} · {exp.location}</p>
       </div>
 
-      {/* Tech badges — before description */}
-      <div className="flex flex-wrap gap-1.5 mb-4">
+      {/* Skills */}
+      <div className="flex flex-wrap gap-1.5 mb-3">
         {exp.technologies.map((tech) => (
           <Badge key={tech} variant="accent">{tech}</Badge>
         ))}
       </div>
 
-      {/* Bullets with show more */}
-      <ul className="space-y-2">
+      {/* Bullets */}
+      <ul className="space-y-1.5">
         <AnimatePresence initial={false}>
           {visible.map((bullet, bi) => (
             <motion.li
@@ -171,9 +172,9 @@ function ExperienceCard({ exp }: ExpProps) {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.2 }}
-              className="flex items-start gap-2.5 text-sm text-slate-400 leading-relaxed overflow-hidden"
+              className="flex items-start gap-2 text-xs text-slate-400 leading-relaxed overflow-hidden"
             >
-              <span className="mt-2 w-1 h-1 rounded-full bg-cyan-500 shrink-0" />
+              <span className="mt-1.5 w-1 h-1 rounded-full bg-indigo-500/70 shrink-0" />
               {bullet}
             </motion.li>
           ))}
@@ -183,9 +184,9 @@ function ExperienceCard({ exp }: ExpProps) {
       {hasMore && (
         <button
           onClick={() => setExpanded(!expanded)}
-          className="mt-3 text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1 transition-colors"
+          className="mt-2.5 text-[11px] text-indigo-400/80 hover:text-indigo-300 flex items-center gap-1 transition-colors"
         >
-          <span>{expanded ? "Show less" : `+${exp.description.length - PREVIEW_COUNT} more`}</span>
+          {expanded ? "Show less" : `+${exp.description.length - PREVIEW_COUNT} more responsibilities`}
           <svg
             className={`w-3 h-3 transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
             fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
@@ -200,16 +201,16 @@ function ExperienceCard({ exp }: ExpProps) {
 
 function DateBlock({ exp, align }: ExpProps & { align: "left" | "right" }) {
   return (
-    <div className={`space-y-2 ${align === "right" ? "items-end" : "items-start"} flex flex-col`}>
-      <span className="text-xs font-mono tracking-widest text-indigo-400/80 uppercase">
+    <div className={`space-y-1.5 flex flex-col ${align === "right" ? "items-end" : "items-start"}`}>
+      <span className="text-[10px] font-mono tracking-widest text-indigo-400/70 uppercase">
         {exp.period}
       </span>
-      <h4 className="text-xl font-bold text-slate-100">{exp.role}</h4>
-      <p className="text-cyan-400 font-semibold text-sm">{exp.company}</p>
+      <h4 className="text-lg font-bold text-slate-100 leading-tight">{exp.role}</h4>
+      <p className="text-cyan-400/80 font-semibold text-sm">{exp.company}</p>
       <p className="text-slate-600 text-xs">{exp.location}</p>
       {exp.current && (
-        <span className="flex items-center gap-1.5 text-[10px] font-medium text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 px-2.5 py-1 rounded-full">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+        <span className="flex items-center gap-1.5 text-[10px] font-medium text-emerald-400 bg-emerald-400/8 border border-emerald-400/20 px-2 py-0.5 rounded-full">
+          <span className="w-1 h-1 rounded-full bg-emerald-400 animate-pulse" />
           Currently here
         </span>
       )}
